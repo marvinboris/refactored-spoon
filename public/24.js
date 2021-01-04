@@ -238,7 +238,9 @@ var Calculation = /*#__PURE__*/function (_Component) {
       amount: '',
       date: '',
       email: '',
-      phone: ''
+      phone: '',
+      start: '',
+      end: ''
     });
 
     _defineProperty(_assertThisInitialized(_this), "submitHandler", function (e) {
@@ -338,7 +340,9 @@ var Calculation = /*#__PURE__*/function (_Component) {
           amount = _this$state.amount,
           date = _this$state.date,
           email = _this$state.email,
-          phone = _this$state.phone;
+          phone = _this$state.phone,
+          start = _this$state.start,
+          end = _this$state.end;
       var content = null;
       if (!packs) packs = [];
       var packsOptions = packs.sort(function (a, b) {
@@ -368,6 +372,13 @@ var Calculation = /*#__PURE__*/function (_Component) {
           var dateInstance = new Date(date);
           if (dateInstance.getTime() > Date.now()) payoutsRemaining++;
         });
+        var total = 0;
+        var startDate = new Date(start);
+        var endDate = new Date(end);
+        total = pack.payout * calculation.result.filter(function (date) {
+          var dateInstance = new Date(date);
+          return startDate.getTime() <= dateInstance.getTime() && dateInstance.getTime() <= endDate.getTime();
+        }).length;
         content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Row"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Col"], {
           xs: 12,
           className: "p-0"
@@ -419,7 +430,46 @@ var Calculation = /*#__PURE__*/function (_Component) {
           className: "rounded",
           size: "lg",
           icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_6__["faPrint"]
-        }, "Print Now"))))));
+        }, "Print Now"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          className: "row pt-3 mt-3 align-items-center border-top"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], {
+          className: "col-lg-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroup"], {
+          className: "rounded-sm"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroupAddon"], {
+          addonType: "prepend"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroupText"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_5__["FontAwesomeIcon"], {
+          fixedWidth: true,
+          icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_6__["faCalendar"]
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+          required: true,
+          onChange: this.inputChangeHandler,
+          type: "date",
+          name: "start",
+          value: start,
+          placeholder: "Start Date"
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], {
+          className: "col-lg-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroup"], {
+          className: "rounded-sm"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroupAddon"], {
+          addonType: "prepend"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["InputGroupText"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_5__["FontAwesomeIcon"], {
+          fixedWidth: true,
+          icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_6__["faCalendar"]
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Input"], {
+          required: true,
+          onChange: this.inputChangeHandler,
+          type: "date",
+          name: "end",
+          value: end,
+          placeholder: "End Date"
+        }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["FormGroup"], {
+          className: "col-lg-4"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Alert"], {
+          color: "success",
+          className: "text-center m-0 text-large text-700"
+        }, total))));
       } else content = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Row"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ResultCard, {
         no: true
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ResultCard, {

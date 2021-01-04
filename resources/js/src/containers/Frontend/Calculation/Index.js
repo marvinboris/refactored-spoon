@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Card, Col, CustomInput, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from "reactstrap";
+import { Card, Col, CustomInput, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faDownload, faEnvelope, faFlag, faIdCard, faPhone, faPrint } from "@fortawesome/free-solid-svg-icons";
+import { faCalculator, faCalendar, faDownload, faEnvelope, faFlag, faIdCard, faPhone, faPrint } from "@fortawesome/free-solid-svg-icons";
 import OwlCarousel from 'react-owl-carousel2';
 
 import AbsoluteButton from '../../../components/UI/Button/AbsoluteButton/AbsoluteButton';
@@ -56,6 +56,8 @@ class Calculation extends Component {
         date: '',
         email: '',
         phone: '',
+        start: '',
+        end: '',
     }
 
     componentDidMount() {
@@ -108,7 +110,7 @@ class Calculation extends Component {
         let {
             frontend: { calculation: { loading, message, calculation, packs } },
         } = this.props;
-        let { pack_id, amount, date, email, phone } = this.state;
+        let { pack_id, amount, date, email, phone, start, end } = this.state;
         let content = null;
 
         if (!packs) packs = [];
@@ -127,6 +129,15 @@ class Calculation extends Component {
                 const dateInstance = new Date(date);
                 if (dateInstance.getTime() > Date.now()) payoutsRemaining++;
             });
+
+            let total = 0;
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+
+            total = pack.payout * calculation.result.filter(date => {
+                const dateInstance = new Date(date);
+                return startDate.getTime() <= dateInstance.getTime() && dateInstance.getTime() <= endDate.getTime();
+            }).length;
 
             content = <>
                 <Row>
@@ -159,6 +170,30 @@ class Calculation extends Component {
                             </div>
                         </div>
                     </Col>
+                </div>
+
+                <div className="row pt-3 mt-3 align-items-center border-top">
+                    <FormGroup className="col-lg-4">
+                        <InputGroup className="rounded-sm">
+                            <InputGroupAddon addonType="prepend">
+                                <InputGroupText><FontAwesomeIcon fixedWidth icon={faCalendar} /></InputGroupText>
+                            </InputGroupAddon>
+                            <Input required onChange={this.inputChangeHandler} type="date" name="start" value={start} placeholder="Start Date" />
+                        </InputGroup>
+                    </FormGroup>
+
+                    <FormGroup className="col-lg-4">
+                        <InputGroup className="rounded-sm">
+                            <InputGroupAddon addonType="prepend">
+                                <InputGroupText><FontAwesomeIcon fixedWidth icon={faCalendar} /></InputGroupText>
+                            </InputGroupAddon>
+                            <Input required onChange={this.inputChangeHandler} type="date" name="end" value={end} placeholder="End Date" />
+                        </InputGroup>
+                    </FormGroup>
+
+                    <FormGroup className="col-lg-4">
+                        <Alert color="success" className="text-center m-0 text-large text-700">{total}</Alert>
+                    </FormGroup>
                 </div>
             </>;
         }
